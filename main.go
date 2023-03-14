@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/vicradon/simple-go-service/api"
+	"github.com/vicradon/shopping-cart-microservice/api"
 )
 
 func main() {
