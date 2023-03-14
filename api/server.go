@@ -9,10 +9,9 @@ import (
 )
 
 type Item struct {
-	ID  uuid.UUID `json:"id"`
-	Name string `json:"name"`
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
-
 
 type Server struct {
 	*mux.Router
@@ -21,7 +20,7 @@ type Server struct {
 
 func NewServer() *Server {
 	s := &Server{
-		Router: mux.NewRouter(),
+		Router:        mux.NewRouter(),
 		shoppingItems: []Item{},
 	}
 	s.Routes()
@@ -117,7 +116,15 @@ func (s *Server) updateItem() http.HandlerFunc {
 	}
 }
 
+func (s *Server) baseRoute() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte("Shopping cart Microservice"))
+	}
+}
+
 func (s *Server) Routes() {
+	s.HandleFunc("/", s.baseRoute()).Methods("GET")
 	s.HandleFunc("/items", s.listShoppingItems()).Methods("GET")
 	s.HandleFunc("/items", s.createShoppingItem()).Methods("POST")
 	s.HandleFunc("/items/{id}", s.getItem()).Methods("GET")
