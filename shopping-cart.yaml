@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopping-cart-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shopping-cart-microservice
+  template:
+    metadata:
+      labels:
+        app: shopping-cart-microservice
+    spec:
+      containers:
+        - name: shopping-cart-container
+          image: vicradon/shopping-cart-microservice:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shopping-cart-service
+spec:
+  selector:
+    app: shopping-cart-microservice
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      nodePort: 30000
+  type: NodePort
